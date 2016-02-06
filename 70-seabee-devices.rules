@@ -1,0 +1,3 @@
+SUBSYSTEM=="tty", ENV{ID_MODEL}=="Xsens_USB-serial_converter", SYMLINK+="seabee/imu", MODE="0666", GROUP="sudo"
+
+SUBSYSTEM=="tty", ENV{ID_MODEL}=="0043", SYMLINK+="seabee/arduino", MODE="0666", GROUP="sudo"
