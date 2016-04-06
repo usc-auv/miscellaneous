@@ -1,0 +1,55 @@
+Below are the steps to get set up for development in ROS and on the AUV team.
+
+First, we need a Linux environment to develop in. In particular, we want the Ubuntu 14.04 operating system. There are two main ways to do this:
+    1. Run the operating system in a virtual machine (like VMware or VirtualBox). This is easier (and also allows you to run in your desired operating system), but comes at the expense of network complexity (an issue when trying to work directly with the robot).
+    2. Install Ubuntu alongside your current operating system. This is a more complex process, but running natively allows software to run faster and networking to be simpler.
+
+    To run virtually:
+        -Install some virtualization software (preferably VirtualBox)
+        -Download the Ubuntu 14.04 LTS Desktop 64-bit ISO file from the Ubuntu website
+        -Create a new VM with the ISO you downloaded. Give the max suggested RAM, 16 GB of storage space, and when it asks how you want to install it, choose Erase Disk and Install Ubuntu (it won't erase your whole hard drive, I promise).
+
+    To run natively:
+        -Download the Ubuntu 14.04 LTS Desktop 64-bit ISO file from the Ubuntu website.
+        -There are a number of ways to go about this from here, but I suggest following a tutorial like this: https://help.ubuntu.com/community/Installation/FromUSBStick
+        -Hint: This process can be a little overwhelming. Finding someone who's done this before can be a big help if you're lost or nervous.
+
+After Linux is up and running, a number of things have to happen:
+
+    1. All of the updates for the operating system have to be installed
+    2. ROS has to be installed
+    3. An ssh key has to be generated (and then added by one of our admins to the GitHub). This also means you need a git hub account if you don't have one
+    4. All of our repositories and software dependencies have to be downloaded.
+
+1. Updating the system:
+    -Click on the swirly Ubuntu icon in the upper left corner
+    -Search for "update" and click on Software Updater
+    -Install all of the updates (it'll probably be pretty big, ~200MB, and also take a while, especially if this is in a VM)
+    -Restart it
+
+2. Installing ROS:
+    -Check out the step by step tutorial at "install_ros.txt" in this directory. It'll tell you what every command does and provide a nice introductory experience to the command line you'll inevitably be using as a computer scientist.
+    -If you're really lazy, you can run the "install_ros.bash" script in this directory by calling "./install_ros.bash" at the command line to have it done automatically for you (and hopefully not break). But I'm judging you. Like reallllly judging you. We're talking serious shade.
+        -You may be prompted for your password at several points. Just go ahead and give it and let 'er rip.
+
+3. SSH-key generation:
+    Generate keys:
+        -Run the following commands
+            "mkdir ~/.ssh" - this creates a directory in your home folder to hold the keys
+            "chmod 700 ~/.ssh" - this makes the directory only readable and writable by root (so no one can sneak a peek)
+            "ssh-keygen -t rsa" - this launches the generation process. You may be asked where to save the keys, save them in the "~/.ssh" directory
+    Update GitHub:
+        -Make an account on github.com if you don't already have one
+        -Click on the icon in the upper right, and select "Settings" from the drop-down menu
+        -Click on "SSH and GPG keys" in the menu on the left
+        -Click on "New SSH key" and give it any title (probably something like auv-ubuntu) then copy and paste the entire contents of the id_rsa.pub file that should have been placed in ~/.ssh. Make sure its id_rsa.pub and not just id_rsa. The second is your private key and you really, REALLY, don't want to put that on GitHub.
+        -Click "Add SSH key"
+
+4. AUV repos and dependencies:
+    Repositories:
+        -Get added to the AUV repositories by an admin
+        -Clone the "tools" repository into ~/auv/src/ or whatever your auv workspace is called (you made this in the Installing ROS part)
+        -Read the README.md in the tools/ repo to get the rest of the repositories.
+
+    Dependencies:
+        -I don't have a list of these, but will try to compile one. For now, expect catkin_make and running ROS nodes to generate errors. They will probably be because of a missing dependency, so read them to find the package, and then install it
