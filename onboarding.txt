@@ -52,4 +52,7 @@ After Linux is up and running, a number of things have to happen:
         -Read the README.md in the tools/ repo to get the rest of the repositories.
 
     Dependencies:
-        -I don't have a list of these, but will try to compile one. For now, expect catkin_make and running ROS nodes to generate errors. They will probably be because of a missing dependency, so read them to find the package, and then install it
+	-run 'sudo apt-get install driver-name-here' for all of the following drivers:
+	ros-indigo-joy
+	ros-indigo-xsens-driver
+

@@ -1,0 +1,18 @@
+login: ubuntu
+pass: ubuntu
+
+Network configuration:
+
+On ubuntu: Go to "Edit Network Connections", edit the Ethernet (wired) connection, click "IPv4 Settings" and change Automatic to "Shared to other computers" and save.
+
+You can use "nmap -n -sP 10.42.0.255/24" to see any hosts on that range
+
+Then, type "ifconfig" in the terminal and find the ethernet connection and the associated IPv4 address. 
+
+Then, type "arp -a". If you see an IP address similar but slightly different from the one you saw above, that should be the Raspberry Pi.
+
+Connect by typing "ssh ubuntu@ip-address-here".
+
+
+*****NOTE ON USING DIFFERENT RPI's
+The udev rules (the things that assign the names "eth0", "eth1", etc.) are linked to the MAC (hardware) address of the computer. When you switch the SD card from different computers, it begins assigning different names for the network ports (usually eth0, then eth1 for the second computer you put it in, eth2 for the third, etc.). The problem, is that the network configuration files (that tell the computer what to do with each port) are only specified for "eth0", so if you're on a different RPI and the ethernet port is called "eth1" instead of "eth0", its not going to work. The fix is to go to /dev/udev/rules.d/70-persistent-net.rules and manually change it. Specifically, you want to find the MAC address associated with the current computer, and change the part that says "eth1" or "eth2" to "eth0", and comment out the other line that currently has "eth0" associated with it. It might be hard to figure out what your current RPi's MAC address is, but typing "ifconfig" should print it. If you can't hook up the computer to a monitor, take out the SD card, put it in another computer, and change the last (i.e. most recent) line to "eth0" and comment out the other ones, then stick it back in the computer. 
