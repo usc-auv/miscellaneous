@@ -3,15 +3,15 @@ pass: ubuntu
 
 Network configuration:
 
-On ubuntu: Go to "Edit Network Connections", edit the Ethernet (wired) connection, click "IPv4 Settings" and change Automatic to "Shared to other computers" and save.
+1. (Required to do just once) On ubuntu: Go to "Edit Network Connections" under the wifi icon in the upper right, select the ethernet connection and click edit, click "IPv4 Settings" tab and change Automatic to "Shared to other computers" and save.
 
-You can use "nmap -n -sP 10.42.0.255/24" to see any hosts on that range
+2. (Optional) You can use the bash command "nmap -n -sP 10.42.0.255/24" to see any hosts on that range (you may need to install nmap)
 
-Then, type "ifconfig" in the terminal and find the ethernet connection and the associated IPv4 address. 
+3. (Optional) Then, type "ifconfig" in the terminal and find the ethernet connection and the associated IPv4 address (probably called eth0). 
 
-Then, type "arp -a". If you see an IP address similar but slightly different from the one you saw above, that should be the Raspberry Pi.
+4. (Suggested, but not required) Then, type "arp -a" in the terminal. If you see an IP address similar but slightly different from the one you saw in the command above, that should be the Raspberry Pi.
 
-Connect by typing "ssh ubuntu@ip-address-here".
+5. (Required every time) Connect by typing "ssh ubuntu@raspberry-pi-ip-address-here".
 
 
 *****NOTE ON USING DIFFERENT RPI's

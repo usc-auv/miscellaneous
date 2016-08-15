@@ -1,0 +1,3 @@
+Here are some helpful tools to help the debugging and development of seabee.
+
+rqt_plot -> comes with the full ROS package. Simply send it some topics as bash arguments that you want to see graphed, and it will pull up a real time graph charting the data. Helpful for orientation and desired velocity debugging. You may have to manually mess with the scale to make it nicer. Example: rqt_plot imu/data/orientation/x:y -> this would graph the x and y components of the orientation component of the data component being sent over the 'imu' topic. You can send multiple topics (just separate them by spaces).

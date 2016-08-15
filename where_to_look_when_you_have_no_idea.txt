@@ -1,0 +1,7 @@
+1. Try this directory. There are some documents specific to seabee that try to help with general operation.
+
+2. If you are having trouble with a specific node, try the repository that node is in. Sometimes they have documentation there.
+
+3. You can try to wiki repository, but good luck.
+
+4. Use the online ROS tutorials provided by ROS. This is particularly good for learning about nodes, topics, and other essential ROS components.

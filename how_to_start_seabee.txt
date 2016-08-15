@@ -1,0 +1,42 @@
+1. Ssh in. If you don't know how to do that, refer to raspberry_pi_info.txt in this same directory
+
+#required anytime you run ROS. This is the overhead that sets up and monitors channels, communications, and separate nodes. This is basically a black box as far as we're concerned but needs to be running before anything else
+2. in terminal, type "roscore"
+
+#this is the third party driver that listens to the raw data over usb and makes it easier for us to deal with. _device field may be wrong, if there is an error when the node is run, look in the /dev directory. If /dev/seabee exists, look inside for something that resembles what might be an imu, and use that. If it doesn't, look for a file that resembles ttyUSB0, and try that. Baudrate is correct, and is the rate at which the imu sends updates. Don't be fooled, the xsens_driver documentation says it automatically detects the baudrate, but it doesn't.
+3. in another terminal, type "rosrun xsens_driver mtnode.py _device:=/dev/seabee/imu _baudrate:=921600"
+
+#steps 4 and 5 are written by us, and are purely to log and manipulate imu data into something useful for the rest of the system to see. If we didn't, we would only have acceleration and orientation data and it would be noisy AF. These scripts can be found in the seabee_imu_driver repo.
+
+4. in another terminal, type "rosrun seabee_imu_driver seabee_imu_filters.py"
+
+5. in another terminal, type "rosrun seabee_imu_driver imu_node.py"
+
+#steps 6 and 7 are also written by us and serve to send motor data to the electrical motorboard. The PID node listens to all requests made by other nodes, compiles the info, and sends it to base.py. Base.py only serves to convert the numbers into bytecode that the motorboard can understand. These can be found in the base_controller repo.
+
+6. in another terminal, type "rosrun base_controller pid.py"
+
+7. in another terminal, type "rosrun base_controller base.py"
+
+That's for starting seabee (at the moment).
+
+GENERAL INTRO TO THE ROS ENVIRONMENT
+
+1. Work through the tutorials provided online. They're pretty good and cover almost everything you need to know for seabee.
+	Start at http://wiki.ros.org/ROS/StartGuide and go to the tutorials if you haven't done those yet.
+	
+	Tutorials: Do exercises 1, 2, 5, 6, 7, 12 and 15. 8 and 10 are helpful after you're more familiar with the system.
+
+The quick and dirty:
+
+rostopics - rostopics can be thought of as "channels" where various nodes can send or listen to messages from other nodes. This is a core component of ROS and the only way nodes can talk to eachother. Some helpful commands are rostopic list (which lists all current topics that are up) and rostopic echo your_node_here to have every message sent over the topic printed to the terminal (good for quick checks for valid data or to see if any data is being sent at all). An important note, these are created as soon as a node listens to declares itself as a publisher, but may have no data at all being sent.
+
+rosnodes - the bread and butter of ros, rosnodes are isolated chunks of code that run on their own. These are written in python for USC AUV and each usually only serve one purpose. These listen (subsribe) and send (publish) to topics, allowing nodes to communicate with eachother. 
+
+roscore - the mysterious magic behind ros. This tracks all running nodes and manages all of the topics, as well as sending the topic data around between nodes, etc. Don't worry about how this works, just know we need it.
+
+GENERAL OVERVIEW OF SEABEE SOFTWARE STRUCTURE *this section should actually be a really sweet and detailed flow chart
+
+base_controller - this repo/ros package is used to send data to the motors. This package (containing the pid.py and base.py nodes) should be the only package that talks to the motors. Anytime a node wants the robot to move in a certain direction, it sends the desired velocity data to pid.py. Multiple nodes can request velocities, so pid combines all of these into one cohesive command, that is then send to base controller which converts it to a format that the motorboard (built by the electrical subteam) can understand.
+
+seabee_imu_filter - this repo/ros package manages the imu data. xsens_driver converts the raw usb data to a readable format, imu_filter_stack filters the data to make it nicer (and less noisy) coming from xsens_driver, and then imu_node tries to extract velocity, position and maybe some other data from the information that comes from the imu_filter_stack. imu_node is meant to serve as the node that all of the other nodes check when they want to know where we are/how fast we're going, etc.
